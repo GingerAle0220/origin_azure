@@ -2,6 +2,20 @@
 
 const express = require("express");
 const app = express();
+const http = require("http");
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
+const fs = require("fs");
+const path = require("path");
+
+const DATA_FILE = path.join(__dirname, "data", "messages.json");
+if (!fs.existsSync(path.dirname(DATA_FILE))) {
+  fs.mkdirSync(path.dirname(DATA_FILE), { recursive: true });
+}
+if (!fs.existsSync(DATA_FILE)) {
+  fs.writeFileSync(DATA_FILE, JSON.stringify([]));
+}
 
 app.set('view engine', 'ejs');
 app.use(express.static("public"));
@@ -122,4 +136,48 @@ app.get("/", (req, res) => {
   res.render("index", { books, horaGames, pachinkoList });
 });
 
-app.listen(3000, () => console.log("Example app listening on port 3000!"));
+// Socket.io
+io.on("connection", (socket) => {
+  // 接続時に既存のメッセージを送信
+  fs.readFile(DATA_FILE, "utf8", (err, data) => {
+    if (!err && data) {
+      socket.emit("initial messages", JSON.parse(data));
+    }
+  });
+
+  // 新規投稿を受信
+  socket.on("chat message", (msg) => {
+    fs.readFile(DATA_FILE, "utf8", (err, data) => {
+      let messages = [];
+      if (!err && data) {
+        try { messages = JSON.parse(data); } catch(e) {}
+      }
+      messages.push(msg);
+      fs.writeFile(DATA_FILE, JSON.stringify(messages, null, 2), (err) => {
+        if (!err) {
+          io.emit("chat message", msg); // 全員に送信
+        }
+      });
+    });
+  });
+
+  // 削除リクエストを受信
+  socket.on("delete message", (msgId) => {
+    fs.readFile(DATA_FILE, "utf8", (err, data) => {
+      if (!err && data) {
+        let messages = [];
+        try { messages = JSON.parse(data); } catch(e) {}
+        const newMessages = messages.filter(m => m.id !== msgId);
+        if (messages.length !== newMessages.length) {
+          fs.writeFile(DATA_FILE, JSON.stringify(newMessages, null, 2), (err) => {
+            if (!err) {
+              io.emit("message deleted", msgId); // 全員に削除を通知
+            }
+          });
+        }
+      }
+    });
+  });
+});
+
+server.listen(3000, () => console.log("Example app listening on port 3000!"));

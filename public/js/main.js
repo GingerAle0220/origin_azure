@@ -181,3 +181,117 @@ const mainObserver = new MutationObserver(() => {
   }
 });
 mainObserver.observe(document.body, { attributes: true, childList: true, subtree: true });
+
+// ===== BULLETIN BOARD LOGIC (Socket.io) =====
+(function initBoard() {
+  if (typeof io === 'undefined') return;
+  const socket = io();
+
+  const boardForm = document.getElementById('board-form');
+  const boardName = document.getElementById('board-name');
+  const boardMsg = document.getElementById('board-msg');
+  const boardMessages = document.getElementById('board-messages');
+
+  // Utility to generate unique ID for posts
+  function generateId() {
+    return 'msg_' + Math.random().toString(36).substring(2, 9) + '_' + Date.now();
+  }
+
+  // Render a single message
+  function renderMessage(msg) {
+    const li = document.createElement('li');
+    li.className = 'board-msg-item';
+    li.id = msg.id;
+
+    const header = document.createElement('div');
+    header.className = 'board-msg-header';
+    
+    const nameSpan = document.createElement('span');
+    nameSpan.className = 'board-msg-name';
+    nameSpan.textContent = msg.name;
+
+    const timeSpan = document.createElement('span');
+    timeSpan.className = 'board-msg-time';
+    const d = new Date(msg.timestamp);
+    timeSpan.textContent = `${d.getFullYear()}/${(d.getMonth()+1).toString().padStart(2, '0')}/${d.getDate().toString().padStart(2, '0')} ${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
+
+    header.appendChild(nameSpan);
+    header.appendChild(timeSpan);
+
+    const body = document.createElement('div');
+    body.className = 'board-msg-body';
+    body.textContent = msg.text;
+
+    li.appendChild(header);
+    li.appendChild(body);
+
+    // If the message belongs to this user, add a delete button
+    let myPosts = [];
+    try {
+      myPosts = JSON.parse(localStorage.getItem('myPosts') || '[]');
+    } catch(e) {}
+    
+    if (myPosts.includes(msg.id)) {
+      const delBtn = document.createElement('button');
+      delBtn.className = 'board-msg-del';
+      delBtn.textContent = '削除';
+      delBtn.onclick = () => {
+        if(confirm('この投稿を削除しますか？')) {
+          socket.emit('delete message', msg.id);
+        }
+      };
+      header.appendChild(delBtn);
+    }
+
+    boardMessages.appendChild(li);
+  }
+
+  // Handle Initial messages
+  socket.on('initial messages', (messages) => {
+    boardMessages.innerHTML = ''; // clear
+    messages.forEach(msg => renderMessage(msg));
+  });
+
+  // Handle incoming message
+  socket.on('chat message', (msg) => {
+    renderMessage(msg);
+  });
+
+  // Handle deleted message
+  socket.on('message deleted', (msgId) => {
+    const el = document.getElementById(msgId);
+    if (el) el.remove();
+    
+    // clean up local storage
+    try {
+      let myPosts = JSON.parse(localStorage.getItem('myPosts') || '[]');
+      myPosts = myPosts.filter(id => id !== msgId);
+      localStorage.setItem('myPosts', JSON.stringify(myPosts));
+    } catch(e) {}
+  });
+
+  // Form submit handler
+  if (boardForm) {
+    boardForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = boardName.value.trim();
+      const text = boardMsg.value.trim();
+      if (!name || !text) return;
+
+      const id = generateId();
+      const timestamp = Date.now();
+
+      // Save ID to localStorage to track ownership
+      try {
+        const myPosts = JSON.parse(localStorage.getItem('myPosts') || '[]');
+        myPosts.push(id);
+        localStorage.setItem('myPosts', JSON.stringify(myPosts));
+      } catch(e) {}
+
+      const msg = { id, name, text, timestamp };
+      socket.emit('chat message', msg);
+
+      boardMsg.value = ''; // clear input
+    });
+  }
+})();

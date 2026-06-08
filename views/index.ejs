@@ -152,12 +152,40 @@
       </div>
     </section>
 
+    <!-- ===== BULLETIN BOARD SECTION ===== -->
+    <section id="board-section" class="content-section light-mode">
+      <div class="section-header light">
+        <span class="section-num">MSG</span>
+        <h2>💬 掲示板</h2>
+        <p class="section-desc">好きな本やホラーゲームについて語りましょう！</p>
+      </div>
+      
+      <div class="board-container">
+        <!-- Message form -->
+        <form id="board-form" class="board-form">
+          <div class="form-group">
+            <input type="text" id="board-name" placeholder="ニックネーム" required maxlength="20">
+          </div>
+          <div class="form-group">
+            <textarea id="board-msg" placeholder="メッセージを入力してください..." required rows="3"></textarea>
+          </div>
+          <button type="submit" class="board-submit-btn">送信</button>
+        </form>
+
+        <!-- Message List -->
+        <ul id="board-messages" class="board-messages">
+          <!-- Messages will be injected here via socket.io -->
+        </ul>
+      </div>
+    </section>
+
     <footer>
       <p>© 2026 MY FAVORITES — コインを回してまた遊びに来てね</p>
     </footer>
 
   </div><!-- /main-site -->
 
+  <script src="/socket.io/socket.io.js"></script>
   <script src="/js/main.js"></script>
 </body>
 </html>

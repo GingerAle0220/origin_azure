@@ -567,3 +567,123 @@ footer {
   }
   .coin-symbol { font-size: 38px; }
 }
+
+/* ===== BULLETIN BOARD ===== */
+.board-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: var(--light-surface);
+  border: 1px solid var(--light-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-light);
+  padding: 32px;
+}
+
+.board-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 40px;
+  padding-bottom: 32px;
+  border-bottom: 1px dashed var(--light-border);
+}
+
+.board-form .form-group input,
+.board-form .form-group textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #dcd3c0;
+  border-radius: 8px;
+  font-family: var(--font-jp);
+  font-size: 15px;
+  background: #faf8f3;
+  color: var(--light-text);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.board-form .form-group input:focus,
+.board-form .form-group textarea:focus {
+  outline: none;
+  border-color: var(--light-accent);
+  box-shadow: 0 0 0 3px rgba(232, 97, 26, 0.15);
+}
+
+.board-submit-btn {
+  align-self: flex-end;
+  background: var(--light-accent);
+  color: #fff;
+  border: none;
+  padding: 12px 32px;
+  border-radius: 99px;
+  font-family: var(--font-jp);
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.3s ease;
+}
+
+.board-submit-btn:hover {
+  background: #cc5010;
+  transform: translateY(-2px);
+}
+
+.board-messages {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.board-msg-item {
+  background: #fdfbf7;
+  border: 1px solid #ede7dc;
+  border-radius: 12px;
+  padding: 16px 20px;
+  animation: fadeUp 0.3s ease forwards;
+}
+
+.board-msg-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.board-msg-name {
+  font-weight: 900;
+  color: var(--light-accent2);
+  font-size: 15px;
+}
+
+.board-msg-time {
+  font-size: 12px;
+  color: #999;
+}
+
+.board-msg-del {
+  margin-left: auto;
+  background: #ffeaef;
+  color: #d0021b;
+  border: 1px solid #ffccd5;
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.board-msg-del:hover {
+  background: #ffc2cd;
+}
+
+.board-msg-body {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #444;
+  white-space: pre-wrap;
+}
+
+@media (max-width: 600px) {
+  .board-container {
+    padding: 20px;
+  }
+}
