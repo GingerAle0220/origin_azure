@@ -5,8 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MY FAVORITES</title>
   <link rel="stylesheet" href="/css/style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700;900&family=Bebas+Neue&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+
+  <script>
+    (function(d) {
+      var config = {
+        kitId: 'szk7bkb',
+        scriptTimeout: 3000,
+        async: true
+      },
+      h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+    })(document);
+  </script>
 </head>
 <body>
 
@@ -22,8 +31,8 @@
         <span class="op-text">ホラーゲームを紹介</span>
       </div>
       <div class="op-line" data-delay="2">
-        <span class="op-box" style="background:#7b00ff;">🎰</span>
-        <span class="op-text">パチンコを紹介</span>
+        <span class="op-box" style="background:#7b00ff;">❓</span>
+        <span class="op-text">？？？を紹介</span>
       </div>
       <div class="op-subtitle" data-delay="3">コインをクリックして運命を決めよう</div>
     </div>
@@ -40,18 +49,10 @@
 
       <div class="coin-wrapper">
         <div id="coin-container">
-          <div id="coin">
-            <div class="coin-face coin-front">
-              <span class="coin-symbol">☀</span>
-              <span class="coin-label">表</span>
-            </div>
-            <div class="coin-face coin-back">
-              <span class="coin-symbol">☽</span>
-              <span class="coin-label">裏</span>
-            </div>
-          </div>
+          <!-- 表(sun)を初期表示 -->
+          <img id="coin-img" src="/images/coin_sun.png" alt="コイン表面">
         </div>
-        <p id="coin-hint">クリックでコインを回す</p>
+        <p id="coin-hint">✨ クリックでコインを回す</p>
         <div id="result-badge" class="hidden"></div>
       </div>
     </header>
@@ -61,11 +62,11 @@
       <div class="section-header light">
         <span class="section-num">01</span>
         <h2>📚 好きな本</h2>
-        <p class="section-desc">ずっと大切にしてきた物語たち</p>
+        <p class="section-desc">中学生の時の朝読書から本が好きになりました</p>
       </div>
       <div class="cards-grid">
         <% books.forEach((book, i) => { %>
-        <article class="card light-card" style="animation-delay: '<%= i * 0.12 %>s">
+        <article class="card light-card" style="animation-delay: <%= i * 0.12 %>s">
           <div class="card-image-wrap">
             <img src="<%= book.image %>" alt="<%= book.book_name %>" class="card-img"
               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
@@ -94,7 +95,7 @@
       <div class="section-header dark">
         <span class="section-num">02</span>
         <h2>👻 ホラーゲーム</h2>
-        <p class="section-desc">闇の中で出会った名作たち</p>
+        <p class="section-desc">ホラーゲームはやったことない．動画を見ることしかできない...</p>
       </div>
       <div class="cards-grid">
         <% horaGames.forEach((game, i) => { %>
@@ -126,11 +127,11 @@
       <div class="section-header legend">
         <span class="section-num legend-num">★</span>
         <h2>🎰 パチンコ LEGEND</h2>
-        <p class="section-desc">レジェンドコイン出現！幸運の台を紹介</p>
+        <p class="section-desc">レジェンドコイン出現！大好きな台を紹介</p>
       </div>
       <div class="cards-grid">
         <% pachinkoList.forEach((p, i) => { %>
-        <article class="card legend-card" style="animation-delay: '<%= i * 0.15 %>s'">
+        <article class="card legend-card" style="animation-delay: <%= i * 0.15 %>s">
           <div class="card-image-wrap">
             <img src="<%= p.image %>" alt="<%= p.name %>" class="card-img"
               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
@@ -152,7 +153,7 @@
     </section>
 
     <footer>
-      <p>© 2024 MY FAVORITES — コインを回してまた遊びに来てね</p>
+      <p>© 2026 MY FAVORITES — コインを回してまた遊びに来てね</p>
     </footer>
 
   </div><!-- /main-site -->
