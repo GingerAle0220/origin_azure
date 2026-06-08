@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MY FAVORITES</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700;900&family=Bebas+Neue&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ===== OPENING OVERLAY ===== -->
+  <div id="opening-overlay">
+    <div class="opening-inner">
+      <div class="op-line" data-delay="0">
+        <span class="op-box" style="background:#f5a623;">📚</span>
+        <span class="op-text">好きな本を紹介</span>
+      </div>
+      <div class="op-line" data-delay="1">
+        <span class="op-box" style="background:#d0021b;">👻</span>
+        <span class="op-text">ホラーゲームを紹介</span>
+      </div>
+      <div class="op-line" data-delay="2">
+        <span class="op-box" style="background:#7b00ff;">🎰</span>
+        <span class="op-text">パチンコを紹介</span>
+      </div>
+      <div class="op-subtitle" data-delay="3">コインをクリックして運命を決めよう</div>
+    </div>
+  </div>
+
+  <!-- ===== MAIN SITE ===== -->
+  <div id="main-site" class="hidden">
+
+    <!-- ヘッダー＆コインエリア -->
+    <header id="top-section">
+      <div class="header-bg-text">MY FAVORITES</div>
+      <h1 class="site-title">MY FAVORITES</h1>
+      <p class="site-subtitle">運命のコインをクリックして世界を選べ</p>
+
+      <div class="coin-wrapper">
+        <div id="coin-container">
+          <div id="coin">
+            <div class="coin-face coin-front">
+              <span class="coin-symbol">☀</span>
+              <span class="coin-label">表</span>
+            </div>
+            <div class="coin-face coin-back">
+              <span class="coin-symbol">☽</span>
+              <span class="coin-label">裏</span>
+            </div>
+          </div>
+        </div>
+        <p id="coin-hint">クリックでコインを回す</p>
+        <div id="result-badge" class="hidden"></div>
+      </div>
+    </header>
+
+    <!-- ===== BOOK SECTION (ライトモード) ===== -->
+    <section id="book-section" class="content-section light-mode hidden">
+      <div class="section-header light">
+        <span class="section-num">01</span>
+        <h2>📚 好きな本</h2>
+        <p class="section-desc">ずっと大切にしてきた物語たち</p>
+      </div>
+      <div class="cards-grid">
+        <% books.forEach((book, i) => { %>
+        <article class="card light-card" style="animation-delay: '<%= i * 0.12 %>s">
+          <div class="card-image-wrap">
+            <img src="<%= book.image %>" alt="<%= book.book_name %>" class="card-img"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="card-img-fallback"><span>📖</span></div>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title"><%= book.book_name %></h3>
+            <div class="card-meta">
+              <span>✍ <%= book.writer %></span>
+              <span>🏢 <%= book.publisher %></span>
+              <span>📅 <%= book.year %>年</span>
+            </div>
+            <p class="card-overview"><%= book.book_overview %></p>
+            <div class="card-comment">
+              <span class="comment-label">📝 コメント</span>
+              <p><%= book.my_comment %></p>
+            </div>
+          </div>
+        </article>
+        <% }) %>
+      </div>
+    </section>
+
+    <!-- ===== HORROR GAME SECTION (ダークモード) ===== -->
+    <section id="horror-section" class="content-section dark-mode hidden">
+      <div class="section-header dark">
+        <span class="section-num">02</span>
+        <h2>👻 ホラーゲーム</h2>
+        <p class="section-desc">闇の中で出会った名作たち</p>
+      </div>
+      <div class="cards-grid">
+        <% horaGames.forEach((game, i) => { %>
+        <article class="card dark-card" style="animation-delay: <%= i * 0.12 %>s">
+          <div class="card-image-wrap">
+            <img src="<%= game.image %>" alt="<%= game.game_name %>" class="card-img"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="card-img-fallback dark"><span>🎮</span></div>
+          </div>
+          <div class="card-body">
+            <span class="game-number"># <%= game.number %></span>
+            <h3 class="card-title"><%= game.game_name %></h3>
+            <div class="card-meta dark-meta">
+              <span>🛠 <%= game.developer %></span>
+            </div>
+            <p class="card-overview"><%= game.overview %></p>
+            <div class="card-comment dark-comment">
+              <span class="comment-label">💬 コメント</span>
+              <p><%= game.my_comment %></p>
+            </div>
+          </div>
+        </article>
+        <% }) %>
+      </div>
+    </section>
+
+    <!-- ===== PACHINKO SECTION (レジェンド) ===== -->
+    <section id="pachinko-section" class="content-section legend-mode hidden">
+      <div class="section-header legend">
+        <span class="section-num legend-num">★</span>
+        <h2>🎰 パチンコ LEGEND</h2>
+        <p class="section-desc">レジェンドコイン出現！幸運の台を紹介</p>
+      </div>
+      <div class="cards-grid">
+        <% pachinkoList.forEach((p, i) => { %>
+        <article class="card legend-card" style="animation-delay: '<%= i * 0.15 %>s'">
+          <div class="card-image-wrap">
+            <img src="<%= p.image %>" alt="<%= p.name %>" class="card-img"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="card-img-fallback legend-fallback"><span>🎰</span></div>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title legend-title"><%= p.name %></h3>
+            <div class="card-meta legend-meta">
+              <span>🏭 <%= p.maker %></span>
+            </div>
+            <div class="card-comment legend-comment">
+              <span class="comment-label">⭐ オススメポイント</span>
+              <p><%= p.comment %></p>
+            </div>
+          </div>
+        </article>
+        <% }) %>
+      </div>
+    </section>
+
+    <footer>
+      <p>© 2024 MY FAVORITES — コインを回してまた遊びに来てね</p>
+    </footer>
+
+  </div><!-- /main-site -->
+
+  <script src="/js/main.js"></script>
+</body>
+</html>

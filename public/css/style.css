@@ -1,0 +1,581 @@
+/* ===== CSS VARIABLES ===== */
+:root {
+  --light-bg: #faf8f3;
+  --light-surface: #ffffff;
+  --light-text: #1a1a2e;
+  --light-accent: #e8611a;
+  --light-accent2: #f5a623;
+  --light-border: #e0d8c8;
+
+  --dark-bg: #0a0a0f;
+  --dark-surface: #12121a;
+  --dark-text: #e8e0ff;
+  --dark-accent: #8b00ff;
+  --dark-accent2: #ff0055;
+  --dark-border: #2a1a3e;
+
+  --legend-bg: #0d0a00;
+  --legend-surface: #1a1400;
+  --legend-gold: #ffd700;
+  --legend-orange: #ff8c00;
+
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-jp: 'Zen Kaku Gothic New', sans-serif;
+  --font-serif: 'Noto Serif JP', serif;
+
+  --radius: 16px;
+  --shadow-light: 0 4px 24px rgba(0,0,0,0.08);
+  --shadow-dark: 0 4px 32px rgba(139,0,255,0.2);
+}
+
+/* ===== RESET ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-jp);
+  background: var(--light-bg);
+  color: var(--light-text);
+  overflow-x: hidden;
+}
+
+.hidden { display: none !important; }
+
+/* ===== OPENING OVERLAY ===== */
+#opening-overlay {
+  position: fixed;
+  inset: 0;
+  background: #0a0a12;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.opening-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 40px;
+}
+
+.op-line {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  opacity: 0;
+  transform: translateX(-120px);
+}
+
+.op-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  font-size: 28px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+
+.op-text {
+  font-family: var(--font-jp);
+  font-size: clamp(22px, 4vw, 36px);
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 0.04em;
+}
+
+.op-subtitle {
+  font-family: var(--font-jp);
+  font-size: 16px;
+  color: #888;
+  opacity: 0;
+  transform: translateY(20px);
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* OPENING ANIMATIONS */
+.op-line.slide-in {
+  animation: slideInLeft 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.op-subtitle.fade-in {
+  animation: fadeUp 0.5s ease forwards;
+}
+
+@keyframes slideInLeft {
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== HEADER / COIN AREA ===== */
+#top-section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 60px 20px 80px;
+  background: linear-gradient(135deg, #faf8f3 0%, #fff5e6 50%, #faf8f3 100%);
+  overflow: hidden;
+}
+
+.header-bg-text {
+  position: absolute;
+  font-family: var(--font-display);
+  font-size: clamp(80px, 20vw, 220px);
+  color: rgba(0,0,0,0.04);
+  user-select: none;
+  letter-spacing: 0.05em;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+}
+
+.site-title {
+  font-family: var(--font-display);
+  font-size: clamp(42px, 8vw, 96px);
+  letter-spacing: 0.08em;
+  color: var(--light-text);
+  position: relative;
+}
+
+.site-subtitle {
+  font-size: 15px;
+  color: #888;
+  margin-top: 8px;
+  margin-bottom: 48px;
+  letter-spacing: 0.05em;
+}
+
+/* ===== COIN ===== */
+.coin-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+}
+
+#coin-container {
+  perspective: 1000px;
+  width: 160px;
+  height: 160px;
+  cursor: pointer;
+}
+
+#coin {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 50%;
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.25));
+}
+
+#coin:hover {
+  filter: drop-shadow(0 12px 32px rgba(0,0,0,0.35)) brightness(1.05);
+}
+
+#coin.spinning {
+  animation: coinSpin 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+#coin.is-front { transform: rotateY(0deg); }
+#coin.is-back  { transform: rotateY(180deg); }
+
+/* レジェンドコイン */
+#coin.legend {
+  animation: legendPulse 1.5s ease-in-out infinite !important;
+}
+
+@keyframes coinSpin {
+  0%   { transform: rotateY(0deg); }
+  100% { transform: rotateY(1800deg); }
+}
+
+@keyframes legendPulse {
+  0%, 100% { filter: drop-shadow(0 0 12px #ffd700) drop-shadow(0 0 32px #ff8c00); }
+  50%       { filter: drop-shadow(0 0 28px #ffd700) drop-shadow(0 0 64px #ff8c00) brightness(1.2); }
+}
+
+.coin-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.coin-front {
+  background: radial-gradient(circle at 35% 35%, #ffe082, #f9a825, #e65100);
+  border: 4px solid #ffc107;
+  box-shadow: inset 0 0 20px rgba(255,255,255,0.3), inset 0 -4px 12px rgba(0,0,0,0.2);
+}
+
+.coin-back {
+  background: radial-gradient(circle at 35% 35%, #90caf9, #1565c0, #0a1628);
+  border: 4px solid #1976d2;
+  box-shadow: inset 0 0 20px rgba(255,255,255,0.15), inset 0 -4px 12px rgba(0,0,0,0.3);
+  transform: rotateY(180deg);
+}
+
+/* レジェンドコイン面 */
+#coin.legend .coin-front,
+#coin.legend .coin-back {
+  background: radial-gradient(circle at 35% 35%, #fff9c4, #ffd700, #e65100) !important;
+  border-color: #ffd700 !important;
+}
+
+.coin-symbol {
+  font-size: 48px;
+  line-height: 1;
+}
+
+.coin-label {
+  font-family: var(--font-jp);
+  font-weight: 900;
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.9);
+}
+
+#coin-hint {
+  font-size: 13px;
+  color: #aaa;
+  letter-spacing: 0.05em;
+}
+
+#result-badge {
+  padding: 8px 24px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.05em;
+  animation: badgePop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+#result-badge.badge-light {
+  background: #fff3e0;
+  color: #e65100;
+  border: 2px solid #f5a623;
+}
+#result-badge.badge-dark {
+  background: #1a0030;
+  color: #bb86fc;
+  border: 2px solid #8b00ff;
+}
+#result-badge.badge-legend {
+  background: linear-gradient(90deg, #1a1400, #2a2000);
+  color: #ffd700;
+  border: 2px solid #ffd700;
+  box-shadow: 0 0 16px rgba(255,215,0,0.4);
+}
+
+@keyframes badgePop {
+  from { transform: scale(0.7); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+/* ===== CONTENT SECTIONS ===== */
+.content-section {
+  padding: 80px 20px 100px;
+}
+
+/* ライトモード */
+.light-mode {
+  background: var(--light-bg);
+}
+
+/* ダークモード */
+.dark-mode {
+  background: var(--dark-bg);
+  color: var(--dark-text);
+}
+
+/* レジェンド */
+.legend-mode {
+  background: var(--legend-bg);
+  position: relative;
+  overflow: hidden;
+}
+
+.legend-mode::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 20%, rgba(255,215,0,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(255,140,0,0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* ===== SECTION HEADER ===== */
+.section-header {
+  max-width: 900px;
+  margin: 0 auto 60px;
+  text-align: center;
+  position: relative;
+}
+
+.section-header h2 {
+  font-family: var(--font-jp);
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  margin: 8px 0;
+}
+
+.section-header.light h2  { color: var(--light-text); }
+.section-header.dark h2   { color: var(--dark-text); }
+.section-header.legend h2 { color: var(--legend-gold); text-shadow: 0 0 24px rgba(255,215,0,0.5); }
+
+.section-num {
+  font-family: var(--font-display);
+  font-size: 64px;
+  line-height: 1;
+  display: block;
+  opacity: 0.15;
+}
+
+.legend-num {
+  font-size: 72px;
+  color: var(--legend-gold);
+  opacity: 0.6;
+  animation: legendPulse 2s ease-in-out infinite;
+}
+
+.section-desc {
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  margin-top: 8px;
+}
+
+.section-header.light  .section-desc { color: #999; }
+.section-header.dark   .section-desc { color: #6a6080; }
+.section-header.legend .section-desc { color: #c8a000; }
+
+/* ===== CARDS GRID ===== */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ===== CARD BASE ===== */
+.card {
+  border-radius: var(--radius);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(40px);
+  animation: cardReveal 0.6s ease forwards;
+}
+
+@keyframes cardReveal {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ライトカード */
+.light-card {
+  background: var(--light-surface);
+  border: 1px solid var(--light-border);
+  box-shadow: var(--shadow-light);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.light-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.12);
+}
+
+/* ダークカード */
+.dark-card {
+  background: var(--dark-surface);
+  border: 1px solid var(--dark-border);
+  box-shadow: var(--shadow-dark);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.dark-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--dark-accent);
+  box-shadow: 0 8px 40px rgba(139,0,255,0.35);
+}
+
+/* レジェンドカード */
+.legend-card {
+  background: var(--legend-surface);
+  border: 1px solid rgba(255,215,0,0.3);
+  box-shadow: 0 4px 24px rgba(255,215,0,0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.legend-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--legend-gold);
+  box-shadow: 0 8px 40px rgba(255,215,0,0.25);
+}
+
+/* ===== CARD IMAGE ===== */
+.card-image-wrap {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+  background: #f0ece4;
+}
+
+.dark-card .card-image-wrap  { background: #0d0d16; }
+.legend-card .card-image-wrap { background: #120f00; }
+
+.card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+.card:hover .card-img {
+  transform: scale(1.04);
+}
+
+.card-img-fallback {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 64px;
+  background: #f0ece4;
+}
+.card-img-fallback.dark    { background: #0d0d16; }
+.card-img-fallback.legend-fallback { background: #120f00; }
+
+/* ===== CARD BODY ===== */
+.card-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.game-number {
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0.15em;
+  color: var(--dark-accent2);
+}
+
+.card-title {
+  font-family: var(--font-jp);
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1.3;
+}
+
+.light-card .card-title  { color: var(--light-text); }
+.dark-card .card-title   { color: #e8e0ff; }
+.legend-card .card-title { color: var(--legend-gold); }
+.legend-title            { text-shadow: 0 0 12px rgba(255,215,0,0.3); }
+
+/* META */
+.card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.card-meta span {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 99px;
+  background: #f0ece4;
+  color: #666;
+}
+.dark-meta span {
+  background: #1e1430;
+  color: #9070c0;
+}
+.legend-meta span {
+  background: rgba(255,215,0,0.1);
+  color: #c8a000;
+}
+
+/* OVERVIEW */
+.card-overview {
+  font-family: var(--font-serif);
+  font-size: 13px;
+  line-height: 1.8;
+  color: #555;
+}
+.dark-card .card-overview  { color: #8070a0; }
+.legend-card .card-overview { color: #9a8040; }
+
+/* COMMENT */
+.card-comment {
+  border-top: 1px dashed #e0d8c8;
+  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.dark-comment  { border-top-color: #2a1a3e; }
+.legend-comment { border-top-color: rgba(255,215,0,0.2); }
+
+.comment-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--light-accent);
+}
+.dark-card  .comment-label { color: var(--dark-accent2); }
+.legend-card .comment-label { color: var(--legend-gold); }
+
+.card-comment p {
+  font-size: 13px;
+  line-height: 1.75;
+  color: #444;
+}
+.dark-comment p  { color: #9888b8; }
+.legend-comment p { color: #b89830; }
+
+/* ===== FOOTER ===== */
+footer {
+  text-align: center;
+  padding: 40px 20px;
+  background: var(--dark-bg);
+  color: #444;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+}
+
+/* ===== SCROLL ANIMATION ===== */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.scroll-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+  #coin-container {
+    width: 130px;
+    height: 130px;
+  }
+  .coin-symbol { font-size: 38px; }
+}
