@@ -66,6 +66,7 @@ function initCoin() {
     hint.textContent = '回転中...';
 
     // 結果を先に決定
+    //ここの値を変更することで確率を操作できるよ１までの値の割合
     const rand = Math.random();
     let result;
     if (rand < 0.1)        result = 'legend';// レジェンド→ぱちんこ
